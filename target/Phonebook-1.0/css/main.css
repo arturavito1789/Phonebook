@@ -1,0 +1,239 @@
+﻿
+body{
+        background-color: #88124b;
+        font-family: 'Satisfy', cursive;
+        margin: 0;
+        padding: 0;
+    }
+
+.navbar {
+  height: 90px !important;
+  background-color: #9a193c;
+ /*position:relative;*/
+  top: 0px;
+  z-index: 1130;
+ /* padding-left: 60px;
+ /* padding-right: -40px;
+ /* margin-left: 0px;
+  margin-right: 0px;*/
+
+ 
+ }
+
+.container {
+  padding-left: 0px;
+  padding-right: 0px;/*
+  /*margin-left: 0px;
+  margin-right: 0px;*/
+}
+
+
+.container.data {
+   background-color: #ba2349; 
+  
+}
+
+.nav-link {
+    color: #28a745 !important;
+}
+
+.nav-link.socialIcon {
+    color: steelblue !important;
+}
+
+.row-nav {
+    padding: 0;
+}
+
+hr {
+    background-color: #f9f7f8; 
+  }
+
+
+
+.row.content_row {
+  font-size: 2rem;
+  height:210px; /* высота картинки 200 рх делаем высоту строки 210 и устанавливаем класс align-self-center чтобы были отступы */
+  
+}
+
+.row.separator_row {
+  height: 20px;
+ 
+}
+
+.img-circle {
+    width:200px;
+    height:200px; 
+    border-radius:50%;  
+    border: 2px solid #0fced9;  
+    /* в бутстрап есть класс rounded-circle он делает изображения круглыми однако не всегда если ipg картинка будет овальной поэтому применяем свой класс
+    за счет border-radius и равной ширены и высоты картинка получается круглой.*/
+
+}
+
+
+.btn-cursor:hover {
+   
+    cursor:default;
+    /* на кнопках рядом с полями фио и телефон курсор делаем по умолчанию при наведении*/
+}
+
+.new_contact {
+  border-width: 2px;
+  border-color: rgb(17, 224, 222);
+  border-style: solid;
+  border-radius: 30px;
+  background-color:rgb(250, 247, 248);
+  width: 100%;
+  padding: 0; /*отступы внутри элемента от всех его сторон */
+ }
+
+.new_contact_title
+{
+  border-width: 0px;
+  border-style: transparent;
+  background-color: rgb(98, 192, 201);
+  height: 20%;
+  width: 100%;
+  border-radius: 28px 28px 0px 0px;
+  display: table;
+  padding: 0; /* отступы внутри элемента от всех его сторон */
+}
+
+/* Класс new_contact_title_body нужен только для выравнивания текста по вертикали. По горизонтали текст выравнивается с помошью
+text-align: center - в любом диве. А по вертикали только если у радителя стоит display: table а в текущем диве стоит display: table-cell.
+Как второй вариант можно построить выравнивание на flex см new_contact_footer*/
+  
+.new_contact_title_body
+{
+  border-width: 0px;
+  border-style: transparent;
+  border-bottom: 2px solid rgb(17, 224, 222);
+  height: 20%;
+  width: 100%;
+  border-radius: 28px 28px 0px 0px;
+  font-family: "Segoe Print";
+  font-size: 20px;
+  color: rgb(253, 250, 252);
+  line-height: 1.2;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+ .new_contact_body
+{
+  border-width: 0px;
+  border-style: transparent;
+  background-color: #faf7f8; 
+  height: 60%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; 
+ 
+}
+
+ .new_contact_body .content_div { 
+  width: 40%;
+  padding: 15px;  
+} 
+
+.new_contact_body .content_div .div_margin_top{ 
+  margin-top: 15px;
+} 
+
+.new_contact_body_img {
+    width:100px;
+    height:100px; 
+    border-radius:50%;  
+    border: 2px solid #0fced9;  
+    /* в бутстрап есть класс rounded-circle он делает изображения круглыми однако не всегда если ipg картинка будет овальной поэтому применяем свой класс
+    за счет border-radius и равной ширены и высоты картинка получается круглой.*/
+}
+
+.new_contact_footer {
+  border-width: 0px;
+  border-style: transparent;
+  border-top: 2px solid rgb(17, 224, 222);
+  background-color: #93c264;
+  height: 20%;
+  width: 100%;
+  border-radius: 0px 0px 28px 28px;   
+  text-align: center;    
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+.new_contact_footer_btn
+{
+  border-radius: 25px;
+  background-color: rgb(98, 192, 201);
+  box-shadow: 0px 3px 0px 0px rgba(6, 169, 253, 0.004);
+  font-family: "Segoe Print";
+  font-size: 20px;
+  color: rgb(253, 250, 252);
+  line-height: 1.2;
+  text-align: center; 
+  width: 25%; 
+  height: 90%; 
+}
+
+.new_contact_footer_btn_play {
+  font-size: 20px;
+  font-family: "FontAwesome";
+  color: rgb(29, 154, 82);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.promt_div
+{
+   position: absolute;
+   top:0;
+   left:0;
+   border-width: 1px;
+   border-color: rgb(17, 224, 222);
+   border-style: solid;
+   border-radius: 30px;
+   background-color: rgb(154, 25, 60);
+   height: 90%; 
+   width:22%;
+   font-size: 16px;
+   font-family: "Segoe Print";
+   color: rgb(255, 252, 252);
+   line-height: 1.2;
+   text-align: center;
+}
+
+.promt_div::after {
+    content: ''; 
+    position: absolute; /* Абсолютное позиционирование */
+    left: 45%; 
+    bottom: -18%; /* Положение треугольника */
+    border: 10px solid transparent; /* Прозрачные границы */
+    border-top: 10px solid rgb(154, 25, 60); /* Добавляем треугольник */
+   }
+
+.hidden_element
+{
+   display: none;
+}
+
+
+
+	
+/* background-image: url('../img/icon.png'); 
+	Поиск происходит от каталога в котором лежат стили т.е. нужно сначало подняться на верх в кореневой а 
+	потом спуститься в img*/
+	
+
+
