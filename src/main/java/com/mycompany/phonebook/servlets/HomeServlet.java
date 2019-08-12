@@ -6,8 +6,20 @@
 package com.mycompany.phonebook.servlets;
 
 
+import com.github.badoualy.telegram.api.TelegramClient;
+import com.github.badoualy.telegram.tl.api.TLAbsUser;
+import com.github.badoualy.telegram.tl.api.TLContact;
+import com.github.badoualy.telegram.tl.api.TLUser;
+import com.github.badoualy.telegram.tl.api.auth.TLAuthorization;
+import com.github.badoualy.telegram.tl.api.auth.TLSentCode;
+import com.github.badoualy.telegram.tl.api.contacts.TLContacts;
+import com.github.badoualy.telegram.tl.api.upload.TLFile;
+import com.github.badoualy.telegram.tl.core.TLVector;
+import com.github.badoualy.telegram.tl.exception.RpcErrorException;
 import com.mycompany.phonebook.entitys.Users;
 import com.mycompany.phonebook.dao.DaoEjb;
+import com.mycompany.phonebook.service.BinTelegram;
+import com.mycompany.phonebook.service.StartTelegram;
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.UserActor;
@@ -21,10 +33,13 @@ import com.vk.api.sdk.objects.users.UserXtrCounters;
 import com.vk.api.sdk.queries.users.UserField;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -32,18 +47,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.binary.Base64;
 
 //запрос post можно передавать несколькими способами либо через форму либо js объект XMLHttpRequest
 //если через форму ил при использовании js использовать объект FormData то нужна аннотация MultipartConfig
 //в js можно использовать заголовок "application/x-www-form-urlencoded" и передавать параметры типа 
 //"lorem=ipsum" тогда анотация MultipartConfig не нужна urlPatterns = {"/index.html"}
 @MultipartConfig
-@WebServlet(name = "HomeServlet", urlPatterns = {"/index.html"})//
+@WebServlet(name = "HomeServlet", urlPatterns = {"/index.html", "/getDataTelegram.xhtml"})
 public class HomeServlet extends HttpServlet {
 
   
     @EJB
     private DaoEjb daoEjb;    
+    
+    @Resource
+    BeanManager beanManager;
    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -82,7 +101,7 @@ public class HomeServlet extends HttpServlet {
         out.println("<a class=\"nav-link socialIcon\" id =\"fbLogin\" href=\"#\"><i class=\"fa fa-fw fa-facebook\"></i>Facebook</a>");
         out.println("</li>");
         out.println("<li class=\"nav-item\">");
-        out.println("<a class=\"nav-link socialIcon\" href=\"#\"><i class=\"fa fa-fw fa-paper-plane\"></i>Telegram</a>");
+        out.println("<a class=\"nav-link socialIcon\" href=\"RedirectTelegramServlet?telegram=true\"><i class=\"fa fa-fw fa-paper-plane\"></i>Telegram</a>");
         out.println("</li>");
         out.println("</ul>");
         out.println("<form class=\"form-inline mr-2\">");
@@ -105,13 +124,20 @@ public class HomeServlet extends HttpServlet {
         out.println("</nav>");
         out.println("</div>");
         out.println("<div id = \"container_data\" class=\"container data\" >");
+        Object requestTelegram = request.getAttribute("telegram");
         String codevk = request.getParameter("code");
-        if(codevk == null){
-           List<Users> users = daoEjb.getAllUsers();
-           displayDataPgSql(out, users,true); 
-        }else{
-           displayDataVk(out, codevk); 
+        String telegram =  request.getParameter("telegram");
+        if (telegram != null){
+           displayDataTelegram(out);  
+        } else{
+            if(codevk == null){
+               List<Users> users = daoEjb.getAllUsers();
+               displayDataPgSql(out, users,true); 
+            }else{
+               displayDataVk(out, codevk); 
+            }
         }
+       
         out.println("</div>"); 
         out.println("<script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>");
         out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js\" integrity=\"sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1\" crossorigin=\"anonymous\"></script>");
@@ -143,6 +169,43 @@ public class HomeServlet extends HttpServlet {
         }           
     }
 
+    
+     public void displayDataTelegram(PrintWriter out) {
+          StartTelegram cdiTelegram =  BinTelegram.getBeanInstance(beanManager, StartTelegram.class);
+          String kodTelegram = cdiTelegram.getKodTelegram();
+          String phohe_number = cdiTelegram.getPhohe_number();
+          TLSentCode sentCode = cdiTelegram.getSentCode();
+          TelegramClient client = cdiTelegram.getClient();
+          try{
+              TLAuthorization authorization = client.authSignIn(phohe_number, sentCode.getPhoneCodeHash(), kodTelegram.trim());
+              TLUser self = authorization.getUser().getAsUser();
+              TLContacts tContacts = (TLContacts) client.contactsGetContacts("");
+              Iterator<TLAbsUser> vIt = tContacts.getUsers().iterator();
+              while (vIt.hasNext()){
+                  out.println("<div class=\"row content_row justify-content-center \">");
+                  out.println("<div class=\"col-4 align-self-center text-right\">");
+                  TLAbsUser item = vIt.next();
+                  TLUser itemU = item.getAsUser();
+                  TLFile Photo = client.getUserPhoto(item, true);
+                  byte[] b = Photo.getBytes().getData();
+                  byte[] encodedBytes = Base64.encodeBase64(b);
+                  String src = "data:image/jpeg;base64," + new String(encodedBytes);
+                  out.println(" <img src=" +src + " class=\"img-fluid img-circle\">");
+                  out.println("</div>");                   
+                  out.println("<div class=\"col-8 width-height-img align-self-center text-left text-white font-italic\"> " + itemU.getFirstName() + " " + itemU.getLastName() + " телефон " + itemU.getPhone() + "</div>");
+                  out.println("</div>");             
+                  out.println("<div class=\"row separator_row\">");
+                  out.println("<div class=\"col-12\"><hr/></div>");   
+                  out.println("</div>");  
+               }
+                
+          } catch (Exception e){
+                displayError(out, e.getMessage()); 
+          }
+          
+          
+     }
+     
      public void displayDataVk(PrintWriter out, String code){
         TransportClient transportClient = HttpTransportClient.getInstance(); 
         VkApiClient vk = new VkApiClient(transportClient); 

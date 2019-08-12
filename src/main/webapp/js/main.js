@@ -90,8 +90,10 @@ $(".request_DB").on("click", function (e) {
     }     
     xhr.send(formData);
     $("#container_data").html(xhr.responseText);
-    return false; // если true то будет переход
+    return false; // если true то будет переход на страницу или сервлет указанный в атрибуте href
 });
+
+
 
 
 $("#a_home").on("click", function (e) {

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> </meta>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> </meta>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> </link>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"> </link>
+<link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet"> </link>
+<link rel="stylesheet" href="css/main.css"> </link>
+
+<title>Телефонный справочник</title>
+</h:head>
+<body>
+
+<div class="container menu">
+     <nav id = "navbar" class="navbar navbar-expand-md navbar-light">
+         <a class="navbar-brand" href="#" id ="a_home"><img src="img/new.png" width="100" height="100" class="d-inline-block align-top"> </img> </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                      <a class="nav-link request_DB" href="index.html">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link socialIcon" id ="vkLogin" href="#"><i class="fa fa-fw fa-vk"></i>VK</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link socialIcon" id ="fbLogin" href="#"><i class="fa fa-fw fa-facebook"></i>Facebook</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link socialIcon" href="RedirectTelegramServlet"><i class="fa fa-fw fa-paper-plane"></i>Telegram</a>
+                  </li>
+              </ul>
+   
+              <form class="form-inline mr-2">
+                   <div class="input-group mr-2">
+                        <span class="input-group-append">
+                               <button class="btn btn-success btn-cursor" type="button">
+                                     <i class="fa fa-user"></i>
+                               </button>
+                        </span>
+                        <input class="form-control py-2" type="search" placeholder="ФИО" name="search_fio" id="search-fio"> </input>
+                   </div>
+                   <div class="input-group mr-2">
+                        <button class="btn btn-success btn-cursor" type="button">
+                             <i class="fa fa-phone"></i>
+                        </button>
+                       <input class="form-control py-2" type="search" placeholder="Телефон" name="search_phone" id="search-phone"> </input>
+                   </div>
+                   <button class="btn btn-success request_DB" type="submit" id="btn_search">Поиск</button>
+            </form>
+            
+         </div>	
+     </nav>
+</div>
+
+
+
+
+<div id = "container_data" class="container data" >
+     <div class="row content_row justify-content-center ">
+          <h:form class="form-inline jsf-font">        
+            <div class="col-2 align-self-center">
+                <h:outputText value="#{startTelegram.resultOperationTelegram}" />
+            </div>
+            <div class="col-5 align-self-center">
+            <div class="input-group mb-3 text-left">
+                <div class="input-group-prepend text-left">
+                      <h:outputLabel for="phohe_number">Номер телефона:</h:outputLabel>
+                      <h:inputText id="phohe_number" value="#{startTelegram.phohe_number}"/>
+                      <h:commandLink class="btn btn-success" value="Получить код"  action="#{startTelegram.connectTelegram}"/>
+                </div>    
+            </div>
+            </div>
+            <div class="col-5 align-self-center">
+            <div class="input-group mb-3 text-right">
+                <div class="input-group-prepend text-right">
+                       <h:outputLabel for="kodTelegram">Укажите полученный код:</h:outputLabel>
+                       <h:inputText id="kodTelegram" value="#{startTelegram.kodTelegram}" valueChangeListener="#{startTelegram.changedkodTelegram}"/>
+                       <h:commandLink class="btn btn-success" value="Контакты"  action="#{startTelegram.goToDataTelegram}"/>
+                </div>    
+            </div>
+            </div>
+
+        </h:form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="js/jquery.maskedinput.js"></script>
+<script src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+ Connection connection = DriverManager.getConnection(DB_URL, USER, PASS);
+ System.out.println("подключились");
+ Statement stetmant = connection.createStatement();
+ String qs = "CREATE TABLE IF NOT EXISTS  users (name character varying, id integer NOT NULL, phone character varying,  CONSTRAINT fk_id PRIMARY KEY (id)) WITH ( OIDS=FALSE )";
+ res_operation = stetmant.execute(qs);
+ res_operation = stetmant.execute("CREATE SEQUENCE IF NOT EXISTS users_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 2 CACHE 1");
+              
